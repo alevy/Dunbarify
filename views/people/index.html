@@ -1,0 +1,31 @@
+{% extends "../base.html" %}
+
+{% block head %}<script src="/static/js/people.js" type="text/javascript" charset="utf-8"></script>{% endblock %}
+
+{% block content %}
+<h2>People in My Circles</h2>
+<h3>My Circles</h3>
+<ul>
+  <li><a href="#/circles/*">All People</a></li>
+{% for circle in account.circles %}
+  <li><a href="#/circles/{{ circle }}">{{ circle|capfirst }}</a></li>
+{% endfor %}
+</ul>
+
+<div id="circle_details">
+  <h3>All People</h3>
+  {% if people %}
+  <ul>
+    {% for person in people %}
+    <li>
+      <a href="/p/{{ person.key }}/edit">{{ person.name }}</a>
+      (<a href="{{ person.identifiers.0 }}">{{ person.identifiers.0 }}</a>) - {{ person.circle_strs|join:", " }}
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <em>No people yet... Add the first one <a href="/p/new">here</a>!</em>
+  {% endif %}
+</div>
+
+{% endblock %}

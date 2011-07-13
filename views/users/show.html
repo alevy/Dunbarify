@@ -1,0 +1,46 @@
+{% extends '../base.html' %}
+
+{% block head %}
+{% ifequal account.user user %}
+<script src="/static/js/sha1.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/js/sign.js" type="text/javascript" charset="utf-8"></script>
+{% endifequal %}
+{% endblock %}
+
+{% block content %}
+<h2>{{ account.display_name }}'s Dunbar Circle</h2>
+{% ifequal account.user user %}
+{% if account.restricted %}
+<h3>Secret Token</h3>
+<p>
+  <span id="secret_token">{{ account.secret_token }}</span>
+  <form action="#" method="get" id="sign_form">
+    <div class="field">
+      <label for="nonce">Nonce</label><br/>
+      <input type="text" name="nonce" id="nonce">
+    </div>
+    <p><input type="submit" value="Generate"></p>
+    <div class="field">
+      <label for="result_url">Result URL</label><br/>
+      <input type="text" id="result_url">
+    </div>
+  </form>
+</p>
+{% endif %}
+{% endifequal %}
+<h3>About:</h3>
+<p>
+{% if account.about %}
+{{ account.about }}
+{% else %}
+<em>None</em>
+{% endif %}
+</p>
+
+<h3>People in Circles</h3>
+<ul>
+{% for person in account.people_models %}
+  <li><a href="{{ person.identifiers.0 }}" rel="{{ person.circles|join:" " }}">{{ person.name }}</a></li>
+{% endfor %}
+</ul>
+{% endblock %}

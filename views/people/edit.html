@@ -1,0 +1,28 @@
+{% extends "../base.html" %}
+
+{% block head %}<script src="/static/js/people.js" type="text/javascript" charset="utf-8"></script>{% endblock %}
+
+{% block content %}
+<h2>Edit {{ person.name }}</h2>
+<form action="/p/{{ person.key }}" method="post" accept-charset="utf-8">
+  <div class="field">
+    <label for="person_name">Name</label><br/>
+    <input type="text" name="name" value="{{ person.name }}" id="person_name">
+  </div>
+  
+  <h3>Identifiers:</h3>
+  <div class="field" id="identifiers">
+    {% for identifier in person.identifiers %}
+    <span><br/><input type="text" name="identifiers[]" value="{{identifier}}"/> <a href="#" class="remove">-</a></span>
+    {% endfor %}
+  </div>
+  
+  <h3>Circles</h3>
+  <div class="field" id="circles">
+    {% for circle in person.circles %}
+    <span><br/><input type="text" name="circles[]" value="{{circle|capfirst}}"/> <a href="#" class="remove">-</a></span>
+    {% endfor %}
+  </div>
+  <p><input type="submit" value="Update"></p>
+</form>
+{% endblock %}

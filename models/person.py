@@ -13,16 +13,11 @@
 # COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import base
-from lib import utils
+from google.appengine.ext import db
 
-from google.appengine.api import users
-from google.appengine.ext import webapp
-from google.appengine.ext.webapp import template
-
-class IndexHandler(base.BaseController):
-  def index(self):
-    self.vars["user"] = users.get_current_user()
-    self.render("index/index.html")
-  def create(self):
-    self.redirect(users.create_login_url("/", federated_identity=self.params["openid_identifier"]))
+class Person(db.Model):
+  name = db.StringProperty(required=True)
+  identifiers = db.StringListProperty(required=True)
+  circles = db.StringListProperty(required=True)
+  def circle_strs(self):
+    return map(unicode.capitalize, self.circles)

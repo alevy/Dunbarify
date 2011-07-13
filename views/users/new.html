@@ -1,0 +1,28 @@
+{% extends "../base.html" %}
+
+{% block content %}
+<h2>Create a new account</h2>
+<form action="/u/" method="post" accept-charset="utf-8">
+  <div class="field">
+    <p>
+      <label for="account_nickanme">Nickname</label><br/>
+      <small>Must be at least 4 characters and contain only a-z, 0-9, _, -</small><br/>
+      <input type="text" name="account[nickname]" id="account_nickname" placeholder="jdoe"/><br/>
+    </p>
+  </div>
+  <div class="field">
+    <p>
+      <label for="account_display_name">Display Name</label><br/>
+      <input type="text" name="account[display_name]" id="account_display_name" placeholder="John Doe"/>
+    </p>
+  </div>
+  <div class="field">
+    <p>
+      <label for="account_email">E-mail (optional)</label><br/>
+      <input type="email" name="account[email]" id="account_email" value="{{ user.email }}" placeholder="jdoe@example.com"/>
+    </p>
+  </div>
+  
+  <p><input type="submit" value="Create"></p>
+</form>
+{% endblock %}

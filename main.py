@@ -17,10 +17,14 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
 from handlers.index import *
 from handlers.users import *
+from handlers.people import *
+from handlers.circles import *
 
 def main():
     application = webapp.WSGIApplication([('/', IndexHandler),
-                                          ('/u/([^\.\/]+)/', UsersHandler)],
+                                          (UsersHandler.matcher('/u'), UsersHandler),
+                                          (PeopleHandler.matcher('/p'), PeopleHandler),
+                                          (CirclesHandler.matcher('/circles'), CirclesHandler)],
                                          debug=True)
     util.run_wsgi_app(application)
 

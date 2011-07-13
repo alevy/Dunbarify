@@ -16,6 +16,7 @@
 import re
 
 import utils
+import urllib
 
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
@@ -26,20 +27,32 @@ class RestfulController(webapp.RequestHandler):
     self.params = {}
   def get(self, *args):
     self.parse_params()
-    if (len(args) > 0 and args[0] != ''):
-      self.show(*args)
+    if (len(args) > 1 and args[1]):
+      if (args[1] == 'edit'):
+        self.edit(urllib.url2pathname(args[0]))
+      else:
+        self.error(404)
+    elif (len(args) > 0 and args[0]):
+      if args[0] == 'new':
+        self.new()
+      else:
+        self.show(urllib.url2pathname(args[0]))
     else:
       self.index()
   def post(self, *args):
     self.parse_params()
-    if (len(args) > 0 and args[0] != ''):
-      self.update(*args)
+    if (args[0]):
+      self.update(urllib.url2pathname(args[0]))
     else:
       self.create()
       
   def index(self):
     pass
   def show(self, *arg):
+    pass
+  def edit(self, *args):
+    pass
+  def new(self):
     pass
   def create(self):
     pass
@@ -50,10 +63,13 @@ class RestfulController(webapp.RequestHandler):
     for key in self.request.arguments():
       ar_match = re.search("([^\[]+)\[([0-9]+)\]", key)
       ar_match_str = re.search("([^\[]+)\[([^\]]+)\]", key)
+      ar_match_array = re.search("([^\[]+)\[\]", key)
       if ar_match:
         self.params.setdefault(ar_match.group(1), {})[int(ar_match.group(2))] = self.request.get(key)
       elif ar_match_str:
         self.params.setdefault(ar_match_str.group(1), {})[ar_match_str.group(2)] = self.request.get(key)
+      elif ar_match_array:
+        self.params[ar_match_array.group(1)] = self.request.get_all(key)
       else:
         self.params[key] = self.request.get(key)
   
@@ -61,3 +77,6 @@ class RestfulController(webapp.RequestHandler):
     self.write(template.render(utils.view_path(tmpl), self.vars))
   def write(self, output):
     self.response.out.write(output)
+  @classmethod
+  def matcher(cls, prefix):
+    return prefix + '(?:/([^\.\/]+))?(?:/([^\.\/]+))?/?'

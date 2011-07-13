@@ -1,0 +1,36 @@
+{% extends "../base.html" %}
+
+{% block content %}
+<h2>Edit {{ account.display_name }}'s Account</h2>
+<form action="/u/{{account.nickname}}" method="post" accept-charset="utf-8">
+  <div class="field">
+    <label for="account_restricted">Restrict Access?</label><br/>
+    {% if account.restricted %}
+    <input type="checkbox" name="account[restricted]" id="account_restricted" value="1" checked="checked" />
+    {% else %}
+    <input type="checkbox" name="account[restricted]" id="account_restricted" value="1"/>
+    {% endif %}
+  </div>
+  <div class="field">
+    <p>
+      <label for="account_display_name">Display Name</label><br/>
+      <input type="text" name="account[display_name]" id="account_display_name"
+             value="{{ account.display_name }}" placeholder="John Doe"/>
+    </p>
+  </div>
+  <div class="field">
+    <p>
+      <label for="account_email">E-mail (optional)</label><br/>
+      <input type="email" name="account[email]" id="account_email" value="{{ account.email }}"
+             placeholder="jdoe@example.com"/>
+    </p>
+  </div>
+  <div class="field">
+    <p>
+      <label for="account_about">About</label><br/>
+      <textarea name="account[about]" id="account_about" rows="8" cols="40">{{ account.about }}</textarea>
+    </p>
+  </div>
+  <p><input type="submit" value="Update"></p>
+</form>
+{% endblock %}

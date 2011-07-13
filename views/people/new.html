@@ -1,0 +1,24 @@
+{% extends "../base.html" %}
+
+{% block head %}<script src="/static/js/people.js" type="text/javascript" charset="utf-8"></script>{% endblock %}
+
+{% block content %}
+<h2>Add a Person to My Circles</h2>
+<form action="/p" method="post" accept-charset="utf-8">
+  <div class="field">
+    <label for="person_name">Name</label><br/>
+    <input type="text" name="name" value="" id="person_name">
+  </div>
+  
+  <h3>Identifiers:</h3>
+  <div class="field" id="identifiers">
+    <input type="text" name="identifiers[]">
+  </div>
+  
+  <h3>Circles</h3>
+  <div class="field" id="circles">
+    <input type="text" name="circles[]"/>
+  </div>
+  <p><input type="submit" value="Add"></p>
+</form>
+{% endblock %}

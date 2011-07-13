@@ -1,5 +1,15 @@
 {% extends "../base.html" %}
 
 {% block content %}
-Hello, World
+<p>
+{% if user %}
+  Welcome {{ user.nickname }}! Edit your <a href="/u/{{ account.nickname }}/edit">Dunbar List</a>
+{% else %}
+  To begin, login with your OpenID:
+{% endif %}
+</p>
+
+<p>
+  Dunbarify lets you create a simple index of your social circles. The result is a web page containing basic profile information about you, as well as a list of friends, family, colleagues etc. Everything is marked up using social web standards so other services can parse it. You can set the page to be public and serve as your public home page, or you can restrict access and generate URLs for certain service to use.
+</p>
 {% endblock %}

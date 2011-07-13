@@ -14,15 +14,36 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import base
-from lib import utils
+from models.person import Person
+from google.appengine.ext.db import Key
 
-from google.appengine.api import users
-from google.appengine.ext import webapp
-from google.appengine.ext.webapp import template
-
-class IndexHandler(base.BaseController):
+class PeopleHandler(base.BaseController):
   def index(self):
-    self.vars["user"] = users.get_current_user()
-    self.render("index/index.html")
+    self.vars["people"] = Person.get(self.account.people)
+    self.render('people/index.html')
+  def new(self):
+    self.render('people/new.html')
+  def edit(self, key):
+    self.vars["person"] = Person.get(key)
+    self.render("people/edit.html")
+  
+  def show(self, key):
+    pass
+  
+  def update(self, key):
+    person = Person.get(key)
+    person.name=self.params["name"]
+    person.identifiers=map(unicode.lower, self.params["identifiers"])
+    person.circles=map(unicode.lower, self.params["circles"])
+    person.put()
+    self.redirect("/p")
+  
   def create(self):
-    self.redirect(users.create_login_url("/", federated_identity=self.params["openid_identifier"]))
+    person = Person(parent=self.account,
+                    name=self.params["name"],
+                    identifiers=map(unicode.lower, self.params["identifiers"]),
+                    circles=map(unicode.lower, self.params["circles"]))
+    person.put()
+    self.account.people.append(person.key())
+    self.account.put()
+    self.redirect("/p")

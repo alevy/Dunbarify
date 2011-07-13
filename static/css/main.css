@@ -1,0 +1,47 @@
+body {
+  width: 800px;
+  margin: 0 auto;
+}
+
+header {
+  position: relative;
+}
+
+header nav {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+header nav ul {
+  
+}
+
+header nav ul li {
+  display: inline;
+}
+
+header nav ul li:after {
+  content: " |";
+}
+
+header nav ul li:last-child:after {
+  content: "";
+}
+
+header nav form {
+  display: inline;
+}
+
+input[name="openid_identifier"] {
+  background: url(http://openid.net/login-bg.gif) no-repeat;
+  background-color: #fff;
+  background-position: 0 50%;
+  color: #000;
+  padding-left: 18px;
+  width: 130px;
+}
+
+input[type="text"] {
+  width: 130px;
+}

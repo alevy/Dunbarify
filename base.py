@@ -13,16 +13,16 @@
 # COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import base
-from lib import utils
-
+from lib import handlers
+from models.account import Account
 from google.appengine.api import users
-from google.appengine.ext import webapp
-from google.appengine.ext.webapp import template
 
-class IndexHandler(base.BaseController):
-  def index(self):
-    self.vars["user"] = users.get_current_user()
-    self.render("index/index.html")
-  def create(self):
-    self.redirect(users.create_login_url("/", federated_identity=self.params["openid_identifier"]))
+class BaseController(handlers.RestfulController):
+  def __init__(self):
+    super(BaseController, self).__init__()
+    self.user = users.get_current_user()
+    self.vars["user"] = self.user
+    self.account = None
+    if self.user:
+      self.vars["logout_url"] = users.create_logout_url("/")
+      self.vars["account"] = self.account = Account.get_by_user(self.user)
